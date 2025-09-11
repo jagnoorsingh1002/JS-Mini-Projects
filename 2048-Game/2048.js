@@ -79,20 +79,17 @@ document.addEventListener('keyup', (e) => {
     saveCurrentState();
     if (e.code == "ArrowLeft") {
         slideLeft();
-        setTwo();
     }
     else if (e.code == "ArrowRight") {
         slideRight();
-        setTwo();
     }
     else if (e.code == "ArrowUp") {
         slideUp();
-        setTwo();
     }
     else if (e.code == "ArrowDown") {
         slideDown();
-        setTwo();
     }
+    if(!boardsAreEqual(prevState.Board,board)) setTwo();
     if (isGameOver()) {
         gameOver();
     }
@@ -180,12 +177,15 @@ function slideDown() {
 function isGameOver() {
     if (hasEmptyTile()) return false;
 
-    for (let r = 0; r < rows - 1; r++) {
-        for (let c = 0; c < columns - 1; c++) {
-            //horizontal merge 
-            if (board[r][c] == board[r][c + 1]) return false;
-            //vertical merge 
-            if (board[r][c] == board[r + 1][c]) return false;
+    for (let r = 0; r < rows ; r++) {
+        for (let c = 0; c < columns ; c++) {
+            let num = board[r][c];
+            if (c != columns - 1 && num == board[r][c + 1]) {
+                return false;
+            }
+            if (r != rows - 1 && num == board[r + 1][c]) {
+                return false;
+            }
         }
     }
     return true;
@@ -234,4 +234,13 @@ function prev(){
         // Clear the previous state since we only want to go back one step
         prevState = null;
     }
+}
+
+function boardsAreEqual(b1, b2) {
+  for (let r = 0; r < b1.length; r++) {
+    for (let c = 0; c < b1[r].length; c++) {
+      if (b1[r][c] !== b2[r][c]) return false;
+    }
+  }
+  return true;
 }
